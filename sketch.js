@@ -18,6 +18,8 @@ var scoreImg;
 var bullet;
 var bulletsg;
 var bulletImg;
+// sound for explosion of enemy tank
+var boomSound;
 
 // Score variable for counting of score that player will earns
 var scoreCount = 0;
@@ -39,6 +41,8 @@ t6Img = loadImage("Images/t6.png");
 bulletImg = loadImage("Images/bullet.png");
 // Shooting Sound
 ShootSound = loadSound("Sounds/shoot.mp3");
+// Sound of explosion 
+boomSound = loadSound("Sounds/explo.mp3");
 // Game Over Image
 gameOverImg = loadImage("Images/gameOver.png");
 // Restart Button Image
@@ -94,7 +98,7 @@ enemies1();
 if(bulletsg.isTouching(enemies)){
   enemies.destroyEach();
    bulletsg.destroyEach();
-   //  playSound("sound://category_explosion/8bit_explosion.mp3");
+   boomSound.play();
 scoreCount = scoreCount + 1;
  }
 

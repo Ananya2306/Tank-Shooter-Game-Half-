@@ -1,23 +1,36 @@
 // canvas variable
 var canvas;
+
+// Game State as like ( Start , Play , End )
+var gameState = "start";
+
+// Buttons 
+var startImg;
+var start;
+
 // background variable and its image
 var bg;
 var bgImg;
+
 // player variable and its image 
 var player;
 var playerImg;
+
 // Enemy tanks variable and its images
 var t1Img , t2Img , t3Img , t4Img , t5Img , t6Img ;
 var enemy;
 var enemies;
+
 // Score Image  and sprite variable
 var score1;
 var score2;
 var scoreImg;
+
 // Bullet variable and its Image and its sound
 var bullet;
 var bulletsg;
 var bulletImg;
+
 // sound for explosion of enemy tank
 var boomSound;
 
@@ -26,6 +39,10 @@ var scoreCount = 0;
 
 // Function for loading Images and Sounds
 function preload(){
+// Screen - 1 
+scr2Img = loadImage("Images/scr1.png");
+// Start Button Image
+startImg = loadImage("Images/start.png");
 // background Image
 bgImg = loadImage("Images/grass.png");
 // player Tank Image
@@ -54,14 +71,24 @@ scoreImg = loadImage("Images/score.png");
 
 // Function for creating Sprites
 function setup() {
+
   // Canvas Size
  canvas =  createCanvas(displayWidth-20,displayHeight-30);
-// Player Tank Sprite 
+// Screen 
+screen = createSprite(displayWidth/2,displayHeight/2,20,20);
+screen.addImage(scr2Img);
+screen.scale = 1.5;
+// Start button
+start = createSprite(displayWidth/2, displayHeight/2+200,20,20);
+start.addImage(startImg);
+start.scale = 0.5;
+ // Player Tank Sprite 
  player = createSprite(displayWidth/2,650,20,20);
  // Add Player Image to the Sprite 
  player.addImage(playerImg);
  // Player size
 player.scale = 0.5;
+
 // Group for making multiple Ememies 
 enemies = new Group();
 // Group for making multiple Bullets
@@ -81,7 +108,27 @@ score2.scale = 0.5;
 function draw() {
   // Backgroud image fixed to the canvas
   image(bgImg,0,-displayHeight*4,displayWidth,displayHeight*5);
+if(gameState === "start"){
+  screen.visible = true;
+  start.visible = true;
+  player.visible = false;
+  score1.visible = false;
+  score2.visible = false;
+  enemies.visible = false;
+  bulletsg.visible = false;
+if(mousePressedOver(start)){
+gameState = "play";
+}
+}
 
+if(gameState === "play"){
+  screen.visible = false;
+  start.visible = false;
+  player.visible = true;
+  score1.visible = true;
+  score2.visible = true;
+  enemies.visible = true;
+  bulletsg.visible = true;
  // Give the player Tank to controlit on X - Axis only
 player.x=World.mouseX;
 
@@ -92,29 +139,29 @@ ShootSound.play();
   // function name made for bullet
 createBullet();
 }
+
 // created enemies 
 enemies1();
 
 if(bulletsg.isTouching(enemies)){
   enemies.destroyEach();
-   bulletsg.destroyEach();
-   boomSound.play();
-scoreCount = scoreCount + 1;
+  bulletsg.destroyEach();
+  boomSound.play();
+  scoreCount = scoreCount + 1;
+
  }
 
- if (enemies.y > 600){
-  scoreCount = scoreCount - 1;
 }
   drawSprites();
+  // Writen text
   fill("white");
   text(scoreCount,75,75);
-
   text(scoreCount,75,730);
-
   textSize(24);
   text(".... Press space to shoot the Enemy Tanks ....",displayWidth/2,700);
-}
 
+}
+// Function for making multiple bullets
 function createBullet() {
  
  bullet = createSprite(200,600,20,20);
@@ -129,6 +176,8 @@ function createBullet() {
    bulletsg.add(bullet);
    }
   
+
+// Function for making multiple enemies 
   function enemies1(){
   if(World.frameCount%60===0){
  enemy = createSprite(random(20,1300),0,10,10);

@@ -147,7 +147,7 @@ if(bulletsg.isTouching(enemies)){
   enemies.destroyEach();
   bulletsg.destroyEach();
   boomSound.play();
-  scoreCount = scoreCount + 1;
+  scoreCount = scoreCount + 5;
 
  }
 
